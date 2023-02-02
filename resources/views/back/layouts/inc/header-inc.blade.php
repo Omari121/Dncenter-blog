@@ -242,7 +242,10 @@
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i class="mdi mdi-cog font-size-17 align-middle me-1"></i> Settings<span class="badge bg-success ms-auto">11</span></a>
                                 <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline font-size-17 align-middle me-1"></i> Lock screen</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#"><i class="bx bx-power-off font-size-17 align-middle me-1 text-danger"></i> Logout</a>
+
+                                <a class="dropdown-item text-danger" href="{{ route('author.logout') }}" onclick= "event.preventDefault();document.getElementById('logout-form').submit();">
+                                <i class="bx bx-power-off font-size-17 align-middle me-1 text-danger"></i> Logout                       </a>
+ <form action="{{ route('author.logout') }}" id="logout-form" method="POST">@csrf</form>
                             </div>
                         </div>
 

@@ -9,34 +9,49 @@ use App\Models\User;
 class AuthorLoginForm extends Component
 {
 
-    public $email, $password;
+    public $login_id, $password;
 
     public function loginHandler(){
-       $this->validate([
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required|min:5'
-       ],[
-            'email.required' => 'Enter your email aaddress',
-            'email.email' => 'Invalid email address',
-            'email.exists' => 'This email is not registered in the database',
-            'password.required' => 'Password is required'
-       ]);
+        $fieldType =filter_var($this->login_id, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        if($fieldType =='email'){
+            $this->validate([
+            'login_id'=>'required|email|exists:users,email',
+            'password'=> 'required|min:5',
+        ],[
+            'login_id'=>'Email or Usename is required',
+            'login_id.email'=>'invalid email address',
+            'login_id.exists' =>'email is not registered',
+            'password.required'=>'password is required',
+        ]);
+            
+        }else{
+            $this->validate([
+                'login_id'=>'required|exists:users,username',
+                'password'=>'required|min:5'
+            ],[
+                'login-id.required'=>'Email or Username is required',
+                'login_id.exists'=>'username is not registered',
+                'password.required'=>'Password is required',
+            ]);
 
-            $creds = array('email'=>$this->email, 'password'=>$this->password);
+        }
+        
+        $creds = array($fieldType=>$this->login_id, 'password'=>$this->password);
 
-            if(Auth::guard('web')->attempt($creds)){
-                $checkUser = User::where('email', $this->email)->first();
+        if(Auth::guard('web')->attempt($creds)){
+            $checkUser = User::where($fieldType, $this->login_id)->first();
 
-                if($checkUser->blocked ==1){
-                    Auth::guard('web')->logout();
-                    return redirect()->route('author.login')->with('fail','your account is blocked.');
-                }else{
-                    return redirect()->route('author.home');
-                }
+            If($checkUser->blocked == 1){
+                Auth::guard('web')->logout();
+                return redirect()->route('author.login')->with('fail', 'Your Account has been blocked');
 
             }else{
-                session()->flash('fail', 'Incorrect email and password');
+                return redirect()->route('author.home');
             }
+        }else{
+            session()->flash('fail', 'Incorrect Email/Username or password');
+        }
+    
 
         }
 
