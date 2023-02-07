@@ -1,4 +1,14 @@
+
+
 <div>
+
+@if(Session::get('success'))
+<div class="alert alert-success">
+{{ Session::get('success') }}
+</div>
+@endif
+
+
       <form class="mt-4" method="post" wire:submit.prevent='ForgetHandler()'>
 
                                 <div class="alert alert-success mt-4" role="alert">
