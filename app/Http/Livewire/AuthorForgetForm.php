@@ -53,7 +53,7 @@ class AuthorForgetForm extends Component
             $this->email =null;
             session()->flash('success', 'we have e-mail your password reset Link');
         }
- /*0260305831*/
+ 
 
 
 
